@@ -1,0 +1,15 @@
+{
+  "name": "beauty-returns-triage-agent",
+  "version": "1.0.0",
+  "description": "AI-powered returns and complaint triage for a beauty e-commerce shop",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate-data": "tsx src/generate-mock-data.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,1 @@
+case_id,received_at,order_id,customer_email,message,reason,sentiment,summary,order_value,days_since_delivery,decision,status

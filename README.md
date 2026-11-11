@@ -63,15 +63,9 @@ docs/          Screenshots and process diagrams
 .github/       GitHub Actions workflows
 ```
 
-## Status
+## Setup
 
-- [x] Project setup and README
-- [ ] Mock data and Google Sheet
-- [ ] Make scenario: form, Gemini, Sheet log
-- [ ] Router with three branches, Gmail and Slack
-- [ ] Error handling and failure alerts
-- [ ] Nightly SLA check in TypeScript with GitHub Actions
-- [ ] Unit tests and CI
+See [docs/setup.md](docs/setup.md) for step-by-step instructions.
 
 ## Author
 

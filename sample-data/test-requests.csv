@@ -1,0 +1,9 @@
+order_id,message,expected_decision
+FL-1001,"Hi, the lipstick shade is much darker than on the website. I would like to return it please.",auto_approve
+FL-1002,"The perfume bottle arrived broken and the box was wet. What can I do?",request_photo
+FL-1003,"This is the THIRD time I write to you!! The cream is not what I ordered and nobody answers. Terrible service.",escalate
+FL-1004,"I changed my mind about the gift set, I would like to send it back.",escalate
+FL-1005,"I don't like the mascara, can I return it?",escalate
+FL-1006,"Hallo, das Parfum ist im Paket ausgelaufen. Die Flasche ist halb leer.",request_photo
+FL-1007,"When will my next order arrive? I ordered yesterday.",escalate
+FL-1008,"I ordered the Kerastase shampoo but received a conditioner from another brand.",auto_approve
