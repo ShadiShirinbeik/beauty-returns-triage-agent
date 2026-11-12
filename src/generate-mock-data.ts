@@ -1,5 +1,7 @@
 // Writes mock orders to sample-data/orders.csv.
 // Dates are relative to today, so the 14-day return rule always works.
+// The last column is a Google Sheets formula, so the Sheet always
+// shows how many days ago each order was delivered.
 // Run: npm run generate-data
 
 import { writeFileSync } from "node:fs";
@@ -22,12 +24,15 @@ function daysAgo(days: number) {
   return date.toISOString().slice(0, 10);
 }
 
-let csv = "order_id,customer_name,product,brand,category,amount_eur,order_date,delivery_date\n";
+let csv = "order_id,customer_name,product,brand,category,amount_eur,order_date,delivery_date,days_since_delivery\n";
+let row = 2; // row 1 is the header
 
 for (const o of orders) {
   const orderDate = daysAgo(o.deliveredDaysAgo + 2);
   const deliveryDate = daysAgo(o.deliveredDaysAgo);
-  csv += `${o.id},${o.customer},${o.product},${o.brand},${o.category},${o.amount.toFixed(2)},${orderDate},${deliveryDate}\n`;
+  const daysFormula = `=TODAY()-H${row}`; // column H is delivery_date
+  csv += `${o.id},${o.customer},${o.product},${o.brand},${o.category},${o.amount.toFixed(2)},${orderDate},${deliveryDate},${daysFormula}\n`;
+  row++;
 }
 
 writeFileSync("sample-data/orders.csv", csv);

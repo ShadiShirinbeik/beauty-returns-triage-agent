@@ -1,9 +1,9 @@
-order_id,customer_name,product,brand,category,amount_eur,order_date,delivery_date
-FL-1001,Anna Weber,Matte Lipstick 05,MAC,Makeup,34.90,2026-11-06,2026-11-08
-FL-1002,Lukas Schmidt,Eau de Parfum 50ml,Chanel,Fragrance,112.00,2026-11-07,2026-11-09
-FL-1003,Sara Becker,Hydrating Face Cream,Clinique,Skincare,48.50,2026-11-04,2026-11-06
-FL-1004,Jonas Fischer,Fragrance Gift Set,Dior,Fragrance,189.00,2026-11-05,2026-11-07
-FL-1005,Mia Hoffmann,Volume Mascara,Lancome,Makeup,29.95,2026-10-10,2026-10-12
-FL-1006,Felix Wagner,Eau de Toilette 100ml,Hugo Boss,Fragrance,76.00,2026-11-08,2026-11-10
-FL-1007,Lea Schulz,Vitamin C Serum,The Ordinary,Skincare,18.90,2026-11-03,2026-11-05
-FL-1008,Paul Koch,Shampoo Repair 250ml,Kerastase,Hair,32.50,2026-11-02,2026-11-04
+order_id,customer_name,product,brand,category,amount_eur,order_date,delivery_date,days_since_delivery
+FL-1001,Anna Weber,Matte Lipstick 05,MAC,Makeup,34.90,2026-11-07,2026-11-09,=TODAY()-H2
+FL-1002,Lukas Schmidt,Eau de Parfum 50ml,Chanel,Fragrance,112.00,2026-11-08,2026-11-10,=TODAY()-H3
+FL-1003,Sara Becker,Hydrating Face Cream,Clinique,Skincare,48.50,2026-11-05,2026-11-07,=TODAY()-H4
+FL-1004,Jonas Fischer,Fragrance Gift Set,Dior,Fragrance,189.00,2026-11-06,2026-11-08,=TODAY()-H5
+FL-1005,Mia Hoffmann,Volume Mascara,Lancome,Makeup,29.95,2026-10-11,2026-10-13,=TODAY()-H6
+FL-1006,Felix Wagner,Eau de Toilette 100ml,Hugo Boss,Fragrance,76.00,2026-11-09,2026-11-11,=TODAY()-H7
+FL-1007,Lea Schulz,Vitamin C Serum,The Ordinary,Skincare,18.90,2026-11-04,2026-11-06,=TODAY()-H8
+FL-1008,Paul Koch,Shampoo Repair 250ml,Kerastase,Hair,32.50,2026-11-03,2026-11-05,=TODAY()-H9

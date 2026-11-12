@@ -10,7 +10,8 @@ A support agent reads every return request by hand, checks the order, decides wh
 
 ```mermaid
 flowchart LR
-    A[Customer fills<br>Google Form] --> B[Make scenario<br>triggered]
+    A[Customer fills<br>Google Form] --> W[Apps Script<br>sends to webhook]
+    W --> B[Make scenario<br>starts instantly]
     B --> C[Gemini classifies<br>reason and sentiment]
     C --> D{Router}
     D -->|Simple and eligible| E[Auto-approve<br>Gmail reply]
@@ -24,11 +25,12 @@ flowchart LR
 ```
 
 1. A customer submits a return request through a Google Form.
-2. A Make scenario picks it up and sends the message to Gemini.
-3. Gemini returns structured JSON with the return reason, customer sentiment and a short summary.
-4. A router sends the case to one of three branches based on the rules below.
-5. Every case is logged in Google Sheets with its status.
-6. A nightly GitHub Actions job finds cases waiting longer than 48 hours and posts a summary to Slack.
+2. A Google Apps Script sends the answer to a Make webhook, so the scenario starts instantly.
+3. Make looks up the order and sends the message to Gemini.
+4. Gemini returns structured JSON with the return reason, customer sentiment and a short summary.
+5. A router sends the case to one of three branches based on the rules below.
+6. Every case is logged in Google Sheets with its status.
+7. A nightly GitHub Actions job finds cases waiting longer than 48 hours and posts a summary to Slack.
 
 ## Decision rules
 
@@ -45,7 +47,7 @@ flowchart LR
 |---|---|
 | Workflow orchestration | Make |
 | AI classification | Google Gemini API |
-| Intake form | Google Forms |
+| Intake form | Google Forms, Google Apps Script |
 | Data store | Google Sheets |
 | Notifications | Gmail, Slack API |
 | Scheduled jobs and CI | GitHub Actions |
@@ -56,6 +58,7 @@ flowchart LR
 
 ```
 make/          Exported Make scenario blueprints (JSON)
+apps-script/   Script that sends form answers to the Make webhook
 src/           TypeScript scripts, such as the nightly SLA check
 tests/         Unit tests for the decision and SLA logic
 sample-data/   Mock orders and example customer requests
@@ -69,4 +72,4 @@ See [docs/setup.md](docs/setup.md) for step-by-step instructions.
 
 ## Author
 
-**Shadi Shirinbeikmohaje** · [LinkedIn](https://www.linkedin.com/in/shadishirinbeik/)
+**Shadi Shirinbeikmohajer** · [LinkedIn](https://www.linkedin.com/in/shadishirinbeik/)
