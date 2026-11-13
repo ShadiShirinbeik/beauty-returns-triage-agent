@@ -13,13 +13,11 @@ flowchart LR
     A[Customer fills<br>Google Form] --> W[Apps Script<br>sends to webhook]
     W --> B[Make scenario<br>starts instantly]
     B --> C[Gemini classifies<br>reason and sentiment]
-    C --> D{Router}
+    C --> H[(Google Sheets<br>case log)]
+    H --> D{Router}
     D -->|Simple and eligible| E[Auto-approve<br>Gmail reply]
     D -->|Damaged product| F[Request photo<br>Gmail reply]
-    D -->|Angry or high value| G[Escalate<br>Slack alert]
-    E --> H[(Google Sheets<br>case log)]
-    F --> H
-    G --> H
+    D -->|Angry, high value<br>or unclear| G[Escalate<br>Slack alert]
     H -.->|Every night| I[GitHub Actions<br>SLA check]
     I -.-> J[Slack summary of<br>overdue cases]
 ```
@@ -28,8 +26,8 @@ flowchart LR
 2. A Google Apps Script sends the answer to a Make webhook, so the scenario starts instantly.
 3. Make looks up the order and sends the message to Gemini.
 4. Gemini returns structured JSON with the return reason, customer sentiment and a short summary.
-5. A router sends the case to one of three branches based on the rules below.
-6. Every case is logged in Google Sheets with its status.
+5. Every case is logged in Google Sheets with the status `new`.
+6. A router sends the case to one of three branches based on the rules below, and each branch updates the case status.
 7. A nightly GitHub Actions job finds cases waiting longer than 48 hours and posts a summary to Slack.
 
 ## Decision rules
@@ -65,7 +63,7 @@ src/           TypeScript scripts, such as the nightly SLA check
 tests/         Unit tests for the decision and SLA logic
 sample-data/   Mock orders and example customer requests
 templates/     Slack and email message templates
-docs/          Screenshots and process diagrams
+docs/          Setup guide, screenshots and process diagrams
 .github/       GitHub Actions workflows
 ```
 
