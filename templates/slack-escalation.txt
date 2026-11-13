@@ -1,0 +1,7 @@
+:rotating_light: *Return request needs a human*
+*Order:* {{order_id}}  |  *Value:* €{{order_value}}  |  *Delivered:* {{days_since_delivery}} days ago
+*Customer:* {{email}}
+*Reason:* {{reason}}  |  *Sentiment:* {{sentiment}}
+*Summary:* {{summary}}
+*Message:*
+> {{message}}

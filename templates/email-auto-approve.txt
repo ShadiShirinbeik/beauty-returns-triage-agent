@@ -1,0 +1,12 @@
+Subject: Your return for order {{order_id}} is approved
+
+Hi,
+
+Good news: your return request for order {{order_id}} is approved.
+
+Please send the product back within 14 days using the free return label
+in your account. Your refund will be issued within 3 to 5 business days
+after we receive the parcel.
+
+Best regards,
+Beauty Shop Customer Care

@@ -1,0 +1,13 @@
+Subject: We need a photo for your order {{order_id}}
+
+Hi,
+
+Thank you for letting us know, and we are sorry your order arrived damaged.
+
+To process your request quickly, please reply to this email with a photo
+of the product and the packaging.
+
+As soon as we receive it, we will send you a replacement or a refund.
+
+Best regards,
+Beauty Shop Customer Care

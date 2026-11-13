@@ -41,6 +41,8 @@ flowchart LR
 | Wrong item or changed mind, within 14 days of delivery | Auto-approve and send return instructions |
 | Anything else | Escalate to the team in Slack |
 
+The router filters do not overlap, so each case takes exactly one path. Escalation is the fallback route.
+
 ## Tech stack
 
 | Area | Tools |
@@ -62,6 +64,7 @@ apps-script/   Script that sends form answers to the Make webhook
 src/           TypeScript scripts, such as the nightly SLA check
 tests/         Unit tests for the decision and SLA logic
 sample-data/   Mock orders and example customer requests
+templates/     Slack and email message templates
 docs/          Screenshots and process diagrams
 .github/       GitHub Actions workflows
 ```

@@ -106,3 +106,30 @@ Add these modules after the webhook, in this order:
 | `status` | `new` |
 
 The Gemini API key is stored in a Make connection, never in this repository.
+
+## 7. Route each case
+
+Add a **Router** after the **Add a Row** module. Make sends a case down every route whose filter passes, so the filters must not overlap. The escalation route is the fallback: it only runs when no other route matches.
+
+| Route | Filter (all conditions must be true) | Actions |
+|---|---|---|
+| Request photo | `reason` equal to `damaged`, `sentiment` not equal to `angry`, `order_value` less than or equal to `150` | Update the row: `decision` = `request_photo`, `status` = `waiting_photo` |
+| Auto-approve | `reason` matches pattern `^(wrong_item\|changed_mind)$`, `sentiment` not equal to `angry`, `order_value` less than or equal to `150`, `days_since_delivery` less than or equal to `14` | Update the row: `decision` = `auto_approve`, `status` = `approved` |
+| Escalate (fallback) | None | Slack **Create a Message** in `#returns-escalations` using `templates/slack-escalation.txt`, then update the row: `decision` = `escalate`, `status` = `escalated` |
+
+Each **Update a Row** module uses the row number returned by **Add a Row**. Fields left empty are not changed.
+
+### Slack connection
+
+1. In Slack, create the channel `#returns-escalations`.
+2. In the Slack module, create a connection with the type **Slack (bot)**, so messages come from the Make app and not from a personal account. Leave **Additional Scopes** empty.
+3. Add the Make app to the channel (channel name > **Integrations** > **Add apps**, or type `/invite @Make` in the channel). Without this, Slack returns `not_in_channel`.
+4. After saving the fallback filter, open it again and check it has no conditions. Make sometimes adds an empty condition, which blocks every case.
+
+### Expected results for the test requests
+
+| Order | Route |
+|---|---|
+| FL-1001, FL-1008 | Auto-approve |
+| FL-1002, FL-1006 | Request photo |
+| FL-1003 (angry), FL-1004 (over €150), FL-1005 (30 days), FL-1007 (other) | Escalate |
