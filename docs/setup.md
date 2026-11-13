@@ -133,3 +133,35 @@ Each **Update a Row** module uses the row number returned by **Add a Row**. Fiel
 | FL-1001, FL-1008 | Auto-approve |
 | FL-1002, FL-1006 | Request photo |
 | FL-1003 (angry), FL-1004 (over €150), FL-1005 (30 days), FL-1007 (other) | Escalate |
+
+## 8. Email the customer
+
+The request-photo and auto-approve routes send an email with the **Gmail > Send an Email** module, placed before **Update a Row**. If the email fails, the status stays `new`, so no case is lost.
+
+### Google Cloud OAuth client
+
+Make needs your own OAuth client to send from a personal `@gmail.com` account.
+
+1. In [Google Cloud Console](https://console.cloud.google.com/), create a project, for example `make-returns`.
+2. **APIs & Services > Library**: enable **Gmail API**.
+3. **APIs & Services > OAuth consent screen > Get started**: app name `Make`, audience **External**, your Gmail as support and contact email.
+4. **Branding > Authorized domains**: add `make.com` and `integromat.com`.
+5. **Audience > Test users**: add your Gmail address.
+6. **Data Access > Add or remove scopes**: add
+   - `https://www.googleapis.com/auth/gmail.modify`
+   - `https://www.googleapis.com/auth/gmail.readonly`
+   - `https://www.googleapis.com/auth/gmail.compose`
+   - `https://www.googleapis.com/auth/gmail.send`
+7. **Clients > Create client**: type **Web application**, redirect URI `https://www.make.com/oauth/cb/google-email`. Copy the Client ID and Client secret.
+8. In Make, create a Gmail connection, turn on **Advanced settings**, paste the Client ID and secret, and sign in with Google.
+
+The client secret stays in Make and Google Cloud, never in this repository. While the app is in Testing status, Google may ask you to reauthorize the connection after a few days (Make > **Connections** > **Reauthorize**).
+
+### Email modules
+
+| Route | To | Subject and content |
+|---|---|---|
+| Request photo | Webhook `email` | `templates/email-request-photo.txt` |
+| Auto-approve | Webhook `email` | `templates/email-auto-approve.txt` |
+
+The content field is HTML, so the templates use `<p>` tags for paragraphs. Replace `{{order_id}}` with the webhook `order_id` pill.
