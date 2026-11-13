@@ -41,6 +41,12 @@ flowchart LR
 
 The router filters do not overlap, so each case takes exactly one path. Escalation is the fallback route.
 
+## Error handling
+
+- If Gemini fails, Make posts an alert to Slack and retries the run up to 3 times.
+- If an email fails, Make retries it. The case stays `new` until the email is sent, so no case is lost.
+- Failed runs are stored as incomplete executions and can be retried. See the [runbook](docs/runbook.md).
+
 ## Tech stack
 
 | Area | Tools |

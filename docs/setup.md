@@ -165,3 +165,16 @@ The client secret stays in Make and Google Cloud, never in this repository. Whil
 | Auto-approve | Webhook `email` | `templates/email-auto-approve.txt` |
 
 The content field is HTML, so the templates use `<p>` tags for paragraphs. Replace `{{order_id}}` with the webhook `order_id` pill.
+
+## 9. Handle errors
+
+1. Scenario settings (gear icon): turn on **Store incomplete executions**.
+2. In Slack, create the channel `#automation-alerts` and add the Make app to it.
+3. Right-click the **Gemini** module > **Add error handler**:
+   - **Slack > Create a Message** in `#automation-alerts`, using `templates/slack-error-alert.txt`. Map `error_message` to the error message of the Gemini module.
+   - Then a **Retry** handler (called **Break** in older Make versions): 3 attempts, 15 minutes apart.
+4. Right-click each **Gmail** module > **Add error handler** > **Retry**, with the same settings.
+
+To test it, temporarily change the Gemini model to a name that does not exist, submit the form, and check that the alert arrives in Slack and the run appears in **Incomplete executions**. Then change the model back and delete the test run.
+
+See [runbook.md](runbook.md) for what to do when something fails.

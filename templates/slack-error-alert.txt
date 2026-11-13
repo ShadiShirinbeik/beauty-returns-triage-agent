@@ -1,0 +1,5 @@
+:warning: *Returns automation error*
+*Module:* Gemini classification
+*Order:* {{order_id}}
+*Error:* {{error_message}}
+Make will retry automatically. If it keeps failing, see docs/runbook.md.
