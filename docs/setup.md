@@ -178,3 +178,42 @@ The content field is HTML, so the templates use `<p>` tags for paragraphs. Repla
 To test it, temporarily change the Gemini model to a name that does not exist, submit the form, and check that the alert arrives in Slack and the run appears in **Incomplete executions**. Then change the model back and delete the test run.
 
 See [runbook.md](runbook.md) for what to do when something fails.
+
+## 10. Nightly SLA check
+
+A GitHub Actions workflow (`.github/workflows/sla-check.yml`) runs `src/sla-check.ts` every day at 05:00 UTC. It posts to Slack only when something needs attention:
+
+| Case | Rule |
+|---|---|
+| Stuck | `status` is `new` for more than 1 hour, so the automation probably failed |
+| Overdue | `status` is `escalated` for more than 48 hours |
+
+Cases in `waiting_photo` are not checked, because they wait for the customer. When the team has handled a case, they set its `status` to `closed`.
+
+### Google service account (read-only access to the Sheet)
+
+1. In the Google Cloud project from section 8, go to **APIs & Services > Library** and enable **Google Sheets API**.
+2. **IAM & Admin > Service Accounts > Create service account**, name `sla-check`. Skip the optional role and access steps.
+3. Open the service account > **Keys > Add key > Create new key > JSON**. A key file is downloaded.
+4. Share the Google Sheet with the service account email (`...@...iam.gserviceaccount.com`) as **Viewer**.
+
+### Slack incoming webhook
+
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) > **Create New App > From scratch**, name `Returns SLA check`, choose your workspace.
+2. **Incoming Webhooks**: turn it on, click **Add New Webhook**, choose `#returns-escalations`, and copy the webhook URL.
+
+### GitHub secrets
+
+In the repository: **Settings > Secrets and variables > Actions > New repository secret**.
+
+| Secret | Value |
+|---|---|
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | The full content of the JSON key file |
+| `SPREADSHEET_ID` | The long ID in the Sheet URL, between `/d/` and `/edit` |
+| `SLACK_WEBHOOK_URL` | The Slack webhook URL |
+
+After saving the secrets, delete the downloaded key file. Never put it in this repository.
+
+### Run it
+
+**Actions** tab > **Nightly SLA check** > **Run workflow**. Test rows that were logged before the router existed are still `new`, so the first run should report them as stuck.

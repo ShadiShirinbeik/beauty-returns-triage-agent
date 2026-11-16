@@ -28,7 +28,7 @@ flowchart LR
 4. Gemini returns structured JSON with the return reason, customer sentiment and a short summary.
 5. Every case is logged in Google Sheets with the status `new`.
 6. A router sends the case to one of three branches based on the rules below, and each branch updates the case status.
-7. A nightly GitHub Actions job finds cases waiting longer than 48 hours and posts a summary to Slack.
+7. A nightly GitHub Actions job posts a Slack summary of escalated cases still open after 48 hours, and of cases stuck in `new` for more than 1 hour (a sign the automation failed).
 
 ## Decision rules
 

@@ -22,6 +22,9 @@ The scenario setting **Store incomplete executions** must stay on. Without it, t
 | Slack error `not_in_channel` | Make app was removed from the channel | Add the Make app to the channel again |
 | Cases stay `new` | A run failed after the case was logged | Check Make > scenario > **Incomplete executions** and retry |
 | No new cases at all | Scenario is off, or the Apps Script trigger is missing | Turn the scenario on, run `installTrigger` again |
+| Daily check lists an escalated case | Nobody has handled it for 48 hours | Handle the case, then set its `status` to `closed` in the Sheet |
+| Daily check failed (GitHub email) | A secret is wrong, or the Sheet is not shared with the service account | Open the failed run in the **Actions** tab and read the error |
+| No daily check runs | GitHub turns off scheduled workflows after 60 days without repository activity | **Actions** tab > **Nightly SLA check** > **Enable workflow** |
 
 ## Retry a failed run
 

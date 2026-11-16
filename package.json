@@ -5,11 +5,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate-data": "tsx src/generate-mock-data.ts"
+    "generate-data": "tsx src/generate-mock-data.ts",
+    "sla-check": "tsx src/sla-check.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "google-auth-library": "^11.3.4"
   }
 }
