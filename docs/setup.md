@@ -29,7 +29,7 @@ Keep **Convert text to numbers, dates, and formulas** ticked when importing, so 
 | Column | Meaning |
 |---|---|
 | `case_id` | Unique ID created by Make |
-| `received_at` | When the request arrived |
+| `received_at` | When the request arrived (UTC) |
 | `order_id`, `customer_email`, `message` | Copied from the form |
 | `reason` | From Gemini: `damaged`, `wrong_item`, `changed_mind` or `other` |
 | `sentiment` | From Gemini: `positive`, `neutral` or `angry` |
@@ -53,6 +53,8 @@ In the Responses tab, click **Link to Sheets** and choose the **Beauty Returns**
 `sample-data/test-requests.csv` has one example message per order, with the decision the workflow should make. Submit them through the form with your own email address so you receive the replies.
 
 ## 5. Connect the form to Make
+
+> **Shortcut:** instead of building sections 5 to 9 by hand, create a new scenario in Make, open the **...** menu and choose **Import Blueprint** with `make/returns-triage.blueprint.json`. Then create your own webhook and connections in each module, and select your own Sheet.
 
 ### Create the webhook in Make
 
@@ -102,7 +104,7 @@ Add these modules after the webhook, in this order:
 | `reason`, `sentiment`, `summary` | Parse JSON output |
 | `order_value` | Search Rows `amount_eur` |
 | `days_since_delivery` | Search Rows `days_since_delivery` |
-| `decision` | Empty for now, filled by the router later |
+| `decision` | Empty, filled by the router in section 7 |
 | `status` | `new` |
 
 The Gemini API key is stored in a Make connection, never in this repository.
@@ -113,8 +115,8 @@ Add a **Router** after the **Add a Row** module. Make sends a case down every ro
 
 | Route | Filter (all conditions must be true) | Actions |
 |---|---|---|
-| Request photo | `reason` equal to `damaged`, `sentiment` not equal to `angry`, `order_value` less than or equal to `150` | Update the row: `decision` = `request_photo`, `status` = `waiting_photo` |
-| Auto-approve | `reason` matches pattern `^(wrong_item\|changed_mind)$`, `sentiment` not equal to `angry`, `order_value` less than or equal to `150`, `days_since_delivery` less than or equal to `14` | Update the row: `decision` = `auto_approve`, `status` = `approved` |
+| Request photo | `reason` equal to `damaged`, `sentiment` not equal to `angry`, `order_value` less than or equal to `150` | Gmail email (section 8), then update the row: `decision` = `request_photo`, `status` = `waiting_photo` |
+| Auto-approve | `reason` matches pattern `^(wrong_item\|changed_mind)$`, `sentiment` not equal to `angry`, `order_value` less than or equal to `150`, `days_since_delivery` less than or equal to `14` | Gmail email (section 8), then update the row: `decision` = `auto_approve`, `status` = `approved` |
 | Escalate (fallback) | None | Slack **Create a Message** in `#returns-escalations` using `templates/slack-escalation.txt`, then update the row: `decision` = `escalate`, `status` = `escalated` |
 
 Each **Update a Row** module uses the row number returned by **Add a Row**. Fields left empty are not changed.

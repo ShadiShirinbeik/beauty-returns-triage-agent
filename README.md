@@ -2,6 +2,8 @@
 
 An AI-powered workflow that reads customer return and complaint requests for a beauty e-commerce shop, decides what to do with each one, and acts on it automatically.
 
+Built as a portfolio project. All orders and customers are mock data.
+
 ## The problem
 
 A support agent reads every return request by hand, checks the order, decides whether to approve it, and writes a reply. It is slow, repetitive, and easy to miss urgent cases.
@@ -19,7 +21,7 @@ flowchart LR
     D -->|Damaged product| F[Request photo<br>Gmail reply]
     D -->|Angry, high value<br>or unclear| G[Escalate<br>Slack alert]
     H -.->|Every night| I[GitHub Actions<br>SLA check]
-    I -.-> J[Slack summary of<br>overdue cases]
+    I -.-> J[Slack summary of<br>stuck or overdue cases]
 ```
 
 1. A customer submits a return request through a Google Form.
@@ -56,22 +58,26 @@ The router filters do not overlap, so each case takes exactly one path. Escalati
 | Intake form | Google Forms, Google Apps Script |
 | Data store | Google Sheets |
 | Notifications | Gmail, Slack API |
-| Scheduled jobs and CI | GitHub Actions |
+| Access | Google OAuth2 client (Gmail), Google service account (Sheets) |
+| Scheduled jobs | GitHub Actions |
 | Scripts | TypeScript, Node.js |
-| Testing | Vitest |
 
 ## Project structure
 
 ```
-make/          Exported Make scenario blueprints (JSON)
+make/          Exported Make scenario blueprint and Gemini prompt
 apps-script/   Script that sends form answers to the Make webhook
-src/           TypeScript scripts, such as the nightly SLA check
-tests/         Unit tests for the decision and SLA logic
+src/           Mock data generator and the nightly SLA check
 sample-data/   Mock orders and example customer requests
 templates/     Slack and email message templates
-docs/          Setup guide, screenshots and process diagrams
-.github/       GitHub Actions workflows
+docs/          Setup guide and runbook
+.github/       GitHub Actions workflow for the nightly SLA check
 ```
+
+## Possible next steps
+
+- Track customer photo replies automatically, so `waiting_photo` cases can move on without manual work.
+- Add a dashboard of cases per day, reason and decision.
 
 ## Setup
 
